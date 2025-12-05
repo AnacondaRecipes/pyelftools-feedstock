@@ -44,7 +44,7 @@ test:
   requires:
     - pip
     - python
-    - binutils
+    - binutils  # [unix]
 
 about:
   home: https://github.com/eliben/pyelftools
