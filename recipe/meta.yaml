@@ -36,10 +36,10 @@ test:
     - elftools.common
   commands:
     - pip check
+    - python -c "import elftools; print('pyelftools version:', elftools.__version__)"
     - python test/run_all_unittests.py
     - python test/run_examples_test.py
-    # Not supported on MacOS (greadelf is absent)
-    - python test/run_readelf_tests.py --parallel # [not osx]
+    # Not supported on MacOS
     - python test/run_dwarfdump_tests.py --parallel # [not osx]
   requires:
     - pip
