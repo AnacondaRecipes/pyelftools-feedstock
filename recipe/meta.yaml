@@ -39,8 +39,8 @@ test:
     - python -c "import elftools; print('pyelftools version:', elftools.__version__)"
     - python test/run_all_unittests.py
     - python test/run_examples_test.py
-    # Not supported on MacOS
-    - python test/run_dwarfdump_tests.py --parallel # [not osx]
+    # Others tests are skipped because testing binaries have wrong format
+    # OSError: [Errno 8] Exec format error: 'test/external_tools/llvm-dwarfdump'
   requires:
     - pip
     - python
