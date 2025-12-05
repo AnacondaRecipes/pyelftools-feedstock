@@ -1,5 +1,5 @@
 {% set name = "pyelftools" %}
-{% set version = "0.29" %}
+{% set version = "0.32" %}
 
 
 package:
@@ -7,36 +7,55 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/pyelftools-{{ version }}.tar.gz
-  sha256: ec761596aafa16e282a31de188737e5485552469ac63b60cfcccf22263fd24ff
+  url: https://github.com/eliben/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 82d0399bce74d162fba75b3568ad47bf48ed2c5e028b72026bdc2f678903de7d
 
 build:
-  number: 1
-  # noarch: python
-  # this cannot be noarch b/c it has scripts
-  script: {{ PYTHON }} -m pip install . -vv
+  number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
     - python
+    - setuptools >=46.4.0
     - pip
   run:
     - python
+    # # different packages because of python scripts
+    - __unix    # [unix]
+    - __win     # [win]
 
 test:
+  source_files:
+    - test
+    - elftools
+    - examples
+    - scripts
   imports:
     - elftools
     - elftools.common
   commands:
     - pip check
+    - python test/run_all_unittests.py
+    - python test/run_examples_test.py
+    # Not supported on MacOS (greadelf is absent)
+    - python test/run_readelf_tests.py --parallel # [not osx]
+    - python test/run_dwarfdump_tests.py --parallel # [not osx]
   requires:
     - pip
+    - python
+    - binutils
 
 about:
   home: https://github.com/eliben/pyelftools
   summary: Library for analyzing ELF files and DWARF debugging information
+  description: |
+    pyelftools is a pure-Python library for parsing and analyzing ELF files and DWARF debugging information.
   license: Unlicense
   license_file: LICENSE
+  license_family: Other
+  dev_url: https://github.com/eliben/pyelftools
+  doc_url: https://github.com/eliben/pyelftools/blob/main/doc/user-guide.rst
 
 extra:
   recipe-maintainers:
